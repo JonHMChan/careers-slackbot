@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-r = redis.from_url("redis://127.0.0.1:6379")
+r = redis.from_url("redis://redistogo:273b30ab7575c845853f491ac4797121@grouper.redistogo.com:10434")
 
 @app.route("/", methods = ['GET', 'POST'])
 def hello():
@@ -14,13 +14,13 @@ def hello():
 		return None
 	migrationNumber = 0
 	parts = text.split(" ")
+	currentMigration = {"username": "no one", "number": 0}
 	currentMigrationString = r.get("slack:taking")
-	if currentMigrationString is None and isinstance(currentMigrationString, str):
-		currentMigration = {"username": "no one", "number": 0}
-	else:
+	if isinstance(currentMigrationString, str):
 		try:
 			currentMigration = json.loads(currentMigrationString)
 		except:
+			r.set(json.dumps(currentMigration))
 			return "Uh oh. Something went wrong with trying to get the current migration from redis."
 	if (text == "current"): return "Current migration number is " + str(currentMigration["number"]) + " taken by " + currentMigration["username"]
 	if text == "next":
