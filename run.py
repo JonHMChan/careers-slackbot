@@ -1,6 +1,7 @@
 from flask import Flask, request, json
 import redis
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -48,4 +49,4 @@ def PinBotMessage(message):
 
 if __name__ == "__main__":
 	app.debug = True
-	app.run()
+	app.run(port = int(os.environ.get('PORT', 5000)))
