@@ -8,8 +8,8 @@ r = redis.from_url("redis://redistogo:273b30ab7575c845853f491ac4797121@grouper.r
 
 @app.route("/", methods = ['GET', 'POST'])
 def hello():
-	text = request.args["text"]
-	user_name = request.args["user_name"]
+	text = request.args.get("text", request.form["text"])
+	user_name = request.args.get("user_name", request.form["user_name"])
 	if (text == None):
 		return None
 	migrationNumber = 0
